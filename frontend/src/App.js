@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { Progress } from "./Progress";
 import { Notes } from "./Notes";
-import { Gameplan } from "./Gameplan";
+import Gameplan from "./Gameplan";
 import Layout from "./components/layout";
 import Login from "./login";
 
