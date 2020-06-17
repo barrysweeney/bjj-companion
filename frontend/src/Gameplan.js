@@ -1,20 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { BsArrowDown } from "react-icons/bs";
-
-const PositionWrapper = styled.div`
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
-
-  background: #eee;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  text-align: center;
-`;
+import { Position } from "./components/Position";
 
 const GameplanGrid = styled.div`
   display: grid;
@@ -28,7 +15,7 @@ const ArrowWrapper = styled.div`
   margin: 10px;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   background: red;
   padding: 10px;
   margin: 10px 0;
@@ -39,87 +26,59 @@ const Button = styled.button`
   border: 0;
 `;
 
-class Position extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      position: this.props.position,
-      move: this.props.move,
-      saved: this.props.saved,
-    };
-  }
-
-  updatePosition(e) {
-    this.setState({
-      position: e.target.value,
-      move: this.state.move,
-      saved: this.state.saved,
-    });
-  }
-
-  updateMove(e) {
-    this.setState({
-      position: this.state.position,
-      move: e.target.value,
-      saved: this.state.saved,
-    });
-  }
-
-  addPosition() {
-    this.props.setPositionandMove(this.state.position, this.state.move);
-    this.props.addPosition();
-  }
-
-  render() {
-    return (
-      <div>
-        <PositionWrapper>
-          <input
-            placeholder="Position Name"
-            onChange={this.updatePosition.bind(this)}
-            value={this.state.position || this.props.position}
-          />
-          <ul>
-            <li>
-              {
-                <input
-                  placeholder="Move Name"
-                  onChange={this.updateMove.bind(this)}
-                  value={this.state.move || this.props.move}
-                />
-              }
-            </li>
-          </ul>
-        </PositionWrapper>
-        {this.state.saved ? null : (
-          <Button onClick={this.addPosition.bind(this)}>Add Position</Button>
-        )}
-      </div>
-    );
-  }
-}
-
 class Gameplan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      positionCount: 1,
       positions: [],
       moves: [],
+      addingNewPosition: true,
     };
+  }
+
+  async componentDidMount() {
+    const token = localStorage.getItem("auth-token");
+    const response = await fetch("http://localhost:9000/gameplans/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    });
+    const data = await response.json();
+    console.log(data);
   }
 
   setPositionandMove(position, move) {
     this.setState({
-      positions: this.state.positions.push(position),
-      moves: this.state.moves.push(move),
-      positionCount: this.state.positionCount,
+      positions: this.state.positions.concat([position]),
+      moves: this.state.moves.concat([move]),
+      addingNewPosition: false,
     });
+  }
+
+  async savePositonsAndMovesArraysToDatabase(e) {
+    e.persist();
+    const token = localStorage.getItem("auth-token");
+    const body = {};
+    body.positions = JSON.stringify(this.state.positions);
+    body.moves = JSON.stringify(this.state.moves);
+    const response = await fetch("http://localhost:9000/gameplans/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+      body: JSON.stringify(body),
+    });
+    if (response.status === 200) {
+      e.target.style.display = "none";
+    }
   }
 
   addPosition() {
     this.setState({
-      positionCount: (this.state.positionCount += 1),
+      addingNewPosition: true,
     });
   }
 
@@ -131,36 +90,50 @@ class Gameplan extends Component {
         </header>
 
         <GameplanGrid>
-          {[...Array(this.state.positionCount)].map((i, index) => {
-            if (index === this.state.positionCount - 1) {
-              return (
-                <Position
-                  position={this.state.positions[index]}
-                  name={this.state.positions[index]}
-                  addPosition={this.addPosition.bind(this)}
-                  saved={false}
-                  setPositionandMove={this.setPositionandMove.bind(this)}
-                />
-              );
-            } else {
-              return (
-                <div>
-                  {" "}
-                  <Position
-                    position={this.state.positions[index]}
-                    name={this.state.positions[index]}
-                    saved={true}
-                    setPositionandMove={this.setPositionandMove.bind(this)}
-                  />
+          {[...Array(this.state.moves.length)].map((i, index) => {
+            return (
+              <div>
+                {index !== 0 ? (
                   <ArrowWrapper>
                     <BsArrowDown />
                   </ArrowWrapper>
-                </div>
-              );
-            }
+                ) : null}
+                <Position
+                  position={this.state.positions[index]}
+                  move={this.state.moves[index]}
+                  saved={true}
+                  addPosition={this.addPosition.bind(this)}
+                  displayAddPositionButton={
+                    index === this.state.moves.length - 1 &&
+                    !this.state.addingNewPosition
+                  }
+                  setPositionandMove={this.setPositionandMove.bind(this)}
+                />
+              </div>
+            );
           })}
+          {this.state.addingNewPosition ? (
+            <div>
+              {this.state.moves.length !== 0 ? (
+                <ArrowWrapper>
+                  <BsArrowDown />
+                </ArrowWrapper>
+              ) : null}
+              <Position
+                addPosition={this.addPosition.bind(this)}
+                saved={false}
+                setPositionandMove={this.setPositionandMove.bind(this)}
+              />
+            </div>
+          ) : null}
         </GameplanGrid>
-        <Button onClick={this.saveGameplan}>Save Gameplan</Button>
+        {this.state.addingNewPosition ? null : (
+          <Button
+            onClick={this.savePositonsAndMovesArraysToDatabase.bind(this)}
+          >
+            Save Gameplan
+          </Button>
+        )}
       </div>
     );
   }
