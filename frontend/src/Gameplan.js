@@ -45,8 +45,17 @@ class Gameplan extends Component {
         "auth-token": token,
       },
     });
-    const data = await response.json();
-    console.log(data);
+    if (response.status === 200 || response.status === 304) {
+      const data = await response.json();
+      this.setState({
+        positions: data[0].positions
+          .split("")
+          .filter((pos) => pos !== "[" && pos !== '"' && pos !== "]"),
+        moves: data[0].moves
+          .split("")
+          .filter((move) => move !== "[" && move !== '"' && move !== "]"),
+      });
+    }
   }
 
   setPositionandMove(position, move) {
