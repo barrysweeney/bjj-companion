@@ -38,7 +38,7 @@ class Login extends Component {
       const token = await response.text();
       localStorage.setItem("auth-token", token);
       // re-render the App component, setting it's state to authenticated:true
-      this.props.setAuthenticated();
+      this.props.setAuthenticated(username);
     }
   }
 

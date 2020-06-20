@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { BsArrowDown } from "react-icons/bs";
 import { Position } from "./components/Position";
+import { unescape } from "html-escaper";
+import { Button } from "./components/Button";
 
 const GameplanGrid = styled.div`
   display: grid;
@@ -15,17 +17,6 @@ const ArrowWrapper = styled.div`
   margin: 10px;
 `;
 
-export const Button = styled.button`
-  background: red;
-  padding: 10px;
-  margin: 10px 0;
-  text-transform: uppercase;
-  color: white;
-  border-radius: 5px;
-  font-weight: 600;
-  border: 0;
-`;
-
 class Gameplan extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +24,7 @@ class Gameplan extends Component {
       positions: [],
       moves: [],
       addingNewPosition: true,
+      saveable: false,
     };
   }
 
@@ -47,14 +39,23 @@ class Gameplan extends Component {
     });
     if (response.status === 200 || response.status === 304) {
       const data = await response.json();
-      this.setState({
-        positions: data[0].positions
-          .split("")
-          .filter((pos) => pos !== "[" && pos !== '"' && pos !== "]"),
-        moves: data[0].moves
-          .split("")
-          .filter((move) => move !== "[" && move !== '"' && move !== "]"),
-      });
+      if (data.length > 0) {
+        const positions = unescape(data[data.length - 1].positions)
+          .split('","')
+          .map((item) => item.replaceAll(/"|\[|\]/g, ""))
+          .map((item) => item.replace("&#x2F;", "/"));
+
+        const moves = unescape(data[data.length - 1].moves)
+          .split('","')
+          .map((item) => item.replaceAll(/"|\[|\]/g, ""))
+          .map((item) => item.replace("&#x2F;", "/"));
+
+        this.setState({
+          positions: positions,
+          moves: moves,
+          addingNewPosition: false,
+        });
+      }
     }
   }
 
@@ -63,11 +64,11 @@ class Gameplan extends Component {
       positions: this.state.positions.concat([position]),
       moves: this.state.moves.concat([move]),
       addingNewPosition: false,
+      saveable: true,
     });
   }
 
-  async savePositonsAndMovesArraysToDatabase(e) {
-    e.persist();
+  async savePositonsAndMovesArraysToDatabase() {
     const token = localStorage.getItem("auth-token");
     const body = {};
     body.positions = JSON.stringify(this.state.positions);
@@ -81,21 +82,53 @@ class Gameplan extends Component {
       body: JSON.stringify(body),
     });
     if (response.status === 200) {
-      e.target.style.display = "none";
+      this.setState({
+        saveable: false,
+      });
     }
   }
 
   addPosition() {
     this.setState({
       addingNewPosition: true,
+      saveable: false,
     });
+  }
+
+  removePosition(index) {
+    if (this.state.positions.length === 1) {
+      this.setState({
+        positions: [
+          ...this.state.positions.slice(0, index),
+          ...this.state.positions.slice(index + 1),
+        ],
+        moves: [
+          ...this.state.moves.slice(0, index),
+          ...this.state.moves.slice(index + 1),
+        ],
+        addingNewPosition: true,
+        saveable: true,
+      });
+    } else {
+      this.setState({
+        positions: [
+          ...this.state.positions.slice(0, index),
+          ...this.state.positions.slice(index + 1),
+        ],
+        moves: [
+          ...this.state.moves.slice(0, index),
+          ...this.state.moves.slice(index + 1),
+        ],
+        saveable: true,
+      });
+    }
   }
 
   render() {
     return (
       <div>
         <header>
-          <h2>Gameplan</h2>
+          <h2>{this.props.username}'s Gameplan</h2>
         </header>
 
         <GameplanGrid>
@@ -117,6 +150,7 @@ class Gameplan extends Component {
                     !this.state.addingNewPosition
                   }
                   setPositionandMove={this.setPositionandMove.bind(this)}
+                  removePosition={() => this.removePosition(index)}
                 />
               </div>
             );
@@ -134,15 +168,14 @@ class Gameplan extends Component {
                 setPositionandMove={this.setPositionandMove.bind(this)}
               />
             </div>
+          ) : this.state.saveable ? (
+            <Button
+              onClick={this.savePositonsAndMovesArraysToDatabase.bind(this)}
+            >
+              Save Gameplan
+            </Button>
           ) : null}
         </GameplanGrid>
-        {this.state.addingNewPosition ? null : (
-          <Button
-            onClick={this.savePositonsAndMovesArraysToDatabase.bind(this)}
-          >
-            Save Gameplan
-          </Button>
-        )}
       </div>
     );
   }

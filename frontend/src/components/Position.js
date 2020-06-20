@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Button } from "../Gameplan";
+import { Button } from "./Button";
 
 export const PositionWrapper = styled.div`
   background: #eee;
@@ -58,10 +58,13 @@ export class Position extends Component {
               <span>{this.props.move}</span>
             </PositionWrapper>
             {this.props.displayAddPositionButton ? (
-              <Button onClick={this.addPosition.bind(this)}>
-                Add position
-              </Button>
+              <div>
+                <Button onClick={this.addPosition.bind(this)}>
+                  Add position
+                </Button>
+              </div>
             ) : null}
+            <Button onClick={this.props.removePosition}>Delete position</Button>
           </div>
         ) : (
           <div>

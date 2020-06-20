@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Progress } from "./Progress";
+import Progress from "./Progress";
 import { Notes } from "./Notes";
 import Gameplan from "./Gameplan";
 import Layout from "./components/layout";
@@ -11,11 +11,12 @@ class App extends Component {
     super(props);
     this.state = {
       authenticated: false,
+      username: null,
     };
   }
 
-  setAuthenticated() {
-    this.setState({ authenticated: true });
+  setAuthenticated(username) {
+    this.setState({ authenticated: true, username: username });
   }
 
   render() {
@@ -25,7 +26,7 @@ class App extends Component {
           <div>
             <Progress />
             <Notes />
-            <Gameplan />
+            <Gameplan username={this.state.username} />
           </div>
         ) : (
           <Login setAuthenticated={this.setAuthenticated.bind(this)} />
