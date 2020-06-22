@@ -1,18 +1,51 @@
 const Progress = require("../models/progress");
 const validator = require("express-validator");
 
-// list of all hours trained
-exports.index = function (req, res) {
+// list of total hours trained by month
+exports.progress_month_get = function (req, res) {
   Progress.find({ user: req.user._id }).exec(function (err, hours_list) {
     if (err) {
       return next(err);
     }
-    const hours = hours_list.map((hoursEntry) => {
-      return {
-        hoursTrained: hoursEntry.hoursTrained,
-      };
-    });
-    res.json(hours);
+    const hours = hours_list
+      .filter(
+        (hoursEntry) => parseInt(hoursEntry.month) === parseInt(req.params.id)
+      )
+      .map((hoursEntry) => {
+        return {
+          hoursTrained: hoursEntry.hoursTrained,
+          date: hoursEntry.date,
+        };
+      });
+    if (hours.length > 0) {
+      res.json(hours[hours.length - 1].hoursTrained);
+    } else {
+      res.json(0);
+    }
+  });
+};
+
+// list of total hours trained by year
+exports.progress_year_get = function (req, res) {
+  Progress.find({ user: req.user._id }).exec(function (err, hours_list) {
+    if (err) {
+      return next(err);
+    }
+    const hours = hours_list
+      .filter(
+        (hoursEntry) => parseInt(hoursEntry.year) === parseInt(req.params.id)
+      )
+      .map((hoursEntry) => {
+        return {
+          hoursTrained: hoursEntry.hoursTrained,
+          date: hoursEntry.date,
+        };
+      });
+    if (hours.length > 0) {
+      res.json(hours[hours.length - 1].hoursTrained);
+    } else {
+      res.json(0);
+    }
   });
 };
 
