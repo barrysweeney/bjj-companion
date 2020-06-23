@@ -6,33 +6,32 @@ const GridContainer = styled.div`
   height: 100vh;
   width: 100%;
   margin: 0 auto;
+  padding-top: 30px;
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
 `;
 
-const NavList = styled.ul`
+const NavList = styled.nav`
+  position: fixed;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  width: -moz-available;
+  background: white;
 `;
 
 export default function Layout({ children }) {
   return (
     <Container>
+      <NavList>
+        <a href="#progress">Progress</a>
+
+        <a href="#notes">Notes</a>
+
+        <a href="#gameplan">Gameplan</a>
+      </NavList>
+
       <GridContainer>
-        <nav>
-          <NavList>
-            <li>
-              <a href="#">Progress</a>
-            </li>
-            <li>
-              <a href="#">Notes</a>
-            </li>
-            <li>
-              <a href="#">Gameplan</a>
-            </li>
-          </NavList>
-        </nav>
         <header>
           <h1>Jiu-Jitsu Companion</h1>
         </header>

@@ -126,7 +126,7 @@ class Gameplan extends Component {
 
   render() {
     return (
-      <div>
+      <div id="gameplan">
         <header>
           <h2>{this.props.username}'s Gameplan</h2>
         </header>

@@ -25,8 +25,8 @@ class App extends Component {
         {this.state.authenticated ? (
           <div>
             <Progress />
-            <Notes />
             <Gameplan username={this.state.username} />
+            <Notes />
           </div>
         ) : (
           <Login setAuthenticated={this.setAuthenticated.bind(this)} />

@@ -5,7 +5,15 @@ import styled from "styled-components";
 const ProgressWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-auto-flow: row;
   grid-gap: 10px;
+
+  div {
+    background: #eee;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 5px;
+  }
 `;
 
 class Progress extends Component {
@@ -151,14 +159,17 @@ class Progress extends Component {
 
   render() {
     return (
-      <ProgressWrapper>
-        <header style={{ gridColumn: 1 / -1 }}>
+      <ProgressWrapper id="progress">
+        <header style={{ gridColumn: `1 / -1` }}>
           <h2>Progress</h2>
         </header>
         <div>
           <h3>Hours trained this month</h3>
           <span>{this.state.hoursTrainedThisMonth}</span>
-          <Button onClick={this.addHalfHourTraining.bind(this)}>
+          <Button
+            onClick={this.addHalfHourTraining.bind(this)}
+            style={{ marginLeft: `5px` }}
+          >
             + 0.5 hours
           </Button>
           <Button onClick={this.minusHalfHourTraining.bind(this)}>
