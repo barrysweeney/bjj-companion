@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Button } from "./Button";
+import { FaTrashAlt, FaSave, FaPlus } from "react-icons/fa";
 
 export const PositionWrapper = styled.div`
   background: #eee;
@@ -12,6 +13,11 @@ export const PositionWrapper = styled.div`
   display: grid;
   grid-template-rows: 1fr 1fr;
   justify-content: center;
+`;
+
+const PositionLayout = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1fr;
 `;
 
 export class Position extends Component {
@@ -52,22 +58,24 @@ export class Position extends Component {
     return (
       <div>
         {this.state.saved ? (
-          <div>
+          <PositionLayout>
             <PositionWrapper>
               <span>{this.props.position}</span>
               <span>{this.props.move}</span>
             </PositionWrapper>
+            <Button onClick={this.props.removePosition}>
+              <FaTrashAlt title="Trash can icon to delete position" />
+            </Button>
             {this.props.displayAddPositionButton ? (
-              <div>
+              <div style={{ gridColumn: `1/-1`, textAlign: `center` }}>
                 <Button onClick={this.addPosition.bind(this)}>
-                  Add position
+                  <FaPlus title="Plus icon to add new position" />
                 </Button>
               </div>
             ) : null}
-            <Button onClick={this.props.removePosition}>Delete position</Button>
-          </div>
+          </PositionLayout>
         ) : (
-          <div>
+          <PositionLayout>
             <PositionWrapper>
               <input
                 placeholder="Position Name"
@@ -80,10 +88,11 @@ export class Position extends Component {
                 value={this.state.move}
               />
             </PositionWrapper>
+
             <Button onClick={this.savePosition.bind(this)}>
-              Save Position
+              <FaSave title="Floppy Disk icon to save the position" />
             </Button>
-          </div>
+          </PositionLayout>
         )}
       </div>
     );

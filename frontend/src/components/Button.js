@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Button = styled.button`
-  background: red;
+  background: #2cbce8;
   padding: 10px;
   margin: 10px 10px 10px 0;
   text-transform: uppercase;

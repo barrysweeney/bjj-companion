@@ -5,6 +5,13 @@ import { Notes } from "./Notes";
 import Gameplan from "./Gameplan";
 import Layout from "./components/layout";
 import Login from "./login";
+import styled from "styled-components";
+import "./index.css";
+
+const ContentWrapper = styled.div`
+  display: grid;
+  grid-gap: 50px;
+`;
 
 class App extends Component {
   constructor(props) {
@@ -23,11 +30,14 @@ class App extends Component {
     return (
       <Layout>
         {this.state.authenticated ? (
-          <div>
+          <ContentWrapper>
+            <header>
+              <h2>Welcome {this.state.username}</h2>
+            </header>
             <Progress />
-            <Gameplan username={this.state.username} />
+            <Gameplan />
             <Notes />
-          </div>
+          </ContentWrapper>
         ) : (
           <Login setAuthenticated={this.setAuthenticated.bind(this)} />
         )}

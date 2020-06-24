@@ -17,6 +17,10 @@ const ArrowWrapper = styled.div`
   margin: 10px;
 `;
 
+const GameplanHeader = styled.header`
+  font-family: "Press Start 2P", cursive;
+`;
+
 class Gameplan extends Component {
   constructor(props) {
     super(props);
@@ -127,9 +131,9 @@ class Gameplan extends Component {
   render() {
     return (
       <div id="gameplan">
-        <header>
-          <h2>{this.props.username}'s Gameplan</h2>
-        </header>
+        <GameplanHeader>
+          <h2>Gameplan</h2>
+        </GameplanHeader>
 
         <GameplanGrid>
           {[...Array(this.state.moves.length)].map((i, index) => {

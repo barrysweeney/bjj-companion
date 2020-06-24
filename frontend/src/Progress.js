@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "./components/Button";
 import styled from "styled-components";
+import { FaClock, FaHistory } from "react-icons/fa";
 
 const ProgressWrapper = styled.div`
   display: grid;
@@ -9,10 +10,17 @@ const ProgressWrapper = styled.div`
   grid-gap: 10px;
 
   div {
-    background: #eee;
-    border: 1px solid black;
+    border-left: 4px solid #2cbce8;
     padding: 10px;
     border-radius: 5px;
+  }
+`;
+
+const ProgressHeader = styled.header`
+  grid-column: 1 / -1;
+  font-family: "Monofett", cursive;
+  h2 {
+    font-size: 3rem;
   }
 `;
 
@@ -160,9 +168,9 @@ class Progress extends Component {
   render() {
     return (
       <ProgressWrapper id="progress">
-        <header style={{ gridColumn: `1 / -1` }}>
+        <ProgressHeader>
           <h2>Progress</h2>
-        </header>
+        </ProgressHeader>
         <div>
           <h3>Hours trained this month</h3>
           <span>{this.state.hoursTrainedThisMonth}</span>
@@ -170,14 +178,14 @@ class Progress extends Component {
             onClick={this.addHalfHourTraining.bind(this)}
             style={{ marginLeft: `5px` }}
           >
-            + 0.5 hours
+            + 0.5 <FaClock title="Clock" />
           </Button>
           <Button onClick={this.minusHalfHourTraining.bind(this)}>
-            - 0.5 hours
+            - 0.5 <FaHistory title="Clock with backwards arrow" />
           </Button>
           {this.state.saveable ? (
             <Button onClick={this.saveHoursTrainedToDatabase.bind(this)}>
-              Save changes to hours trained this month
+              Save changes to hours trained
             </Button>
           ) : null}
         </div>

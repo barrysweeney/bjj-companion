@@ -9,6 +9,11 @@ const GridContainer = styled.div`
   padding-top: 30px;
   display: grid;
   grid-template-rows: auto 1fr auto;
+
+  h1 {
+    font-family: "Vibes", cursive;
+    font-size: 3.5rem;
+  }
 `;
 
 const NavList = styled.nav`
@@ -18,6 +23,17 @@ const NavList = styled.nav`
   grid-template-columns: repeat(3, 1fr);
   width: -moz-available;
   background: white;
+
+  a {
+    color: #2cbce8;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+`;
+
+const Footer = styled.footer`
+  text-align: center;
+  padding: 10px;
 `;
 
 export default function Layout({ children }) {
@@ -25,10 +41,8 @@ export default function Layout({ children }) {
     <Container>
       <NavList>
         <a href="#progress">Progress</a>
-
-        <a href="#notes">Notes</a>
-
         <a href="#gameplan">Gameplan</a>
+        <a href="#notes">Notes</a>
       </NavList>
 
       <GridContainer>
@@ -36,7 +50,7 @@ export default function Layout({ children }) {
           <h1>Jiu-Jitsu Companion</h1>
         </header>
         {children}
-        <footer>The footer</footer>
+        <Footer>Jiu Jitsu Companion</Footer>
       </GridContainer>
     </Container>
   );

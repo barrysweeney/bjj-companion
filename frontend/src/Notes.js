@@ -72,7 +72,14 @@ export class Notes extends Component {
     return (
       <div id="notes">
         <header>
-          <h2>Notes</h2>
+          <h2
+            style={{
+              fontFamily: `'Dancing Script', cursive`,
+              fontSize: `3.5rem`,
+            }}
+          >
+            Notes
+          </h2>
         </header>
         <form
           style={{
