@@ -1,16 +1,6 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-
-const Button = styled.button`
-  background: red;
-  padding: 10px;
-  margin: 10px 0;
-  text-transform: uppercase;
-  color: white;
-  border-radius: 5px;
-  font-weight: 600;
-  border: 0;
-`;
+import { Button } from "./components/Button";
+import { BACKEND_URI } from "./App";
 
 class Login extends Component {
   constructor(props) {
@@ -27,7 +17,7 @@ class Login extends Component {
     const body = {};
     body.username = username;
     body.password = password;
-    const response = await fetch("http://localhost:9000/log-in", {
+    const response = await fetch(`${BACKEND_URI}/log-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +44,7 @@ class Login extends Component {
     const body = {};
     body.username = username;
     body.password = password;
-    const response = await fetch("http://localhost:9000/users/create", {
+    const response = await fetch(`${BACKEND_URI}/users/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,12 +62,16 @@ class Login extends Component {
       <div>
         {this.state.signingUp ? (
           <div>
-            <form action="#" onSubmit={this.signupHandler.bind(this)}>
-              <label htmlFor="username">Username</label>
+            <form
+              action="#"
+              onSubmit={this.signupHandler.bind(this)}
+              style={{ fontWeight: 600 }}
+            >
+              <label htmlFor="username">New Username</label>
               <br />
               <input type="text" name="username" />
               <br />
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">New Password</label>
               <br />
               <input type="password" name="password" />
               <br />
@@ -86,7 +80,11 @@ class Login extends Component {
           </div>
         ) : (
           <div>
-            <form action="#" onSubmit={this.submitHandler.bind(this)}>
+            <form
+              action="#"
+              onSubmit={this.submitHandler.bind(this)}
+              style={{ fontWeight: 600 }}
+            >
               <label htmlFor="username">Username</label>
               <br />
               <input type="text" name="username" />

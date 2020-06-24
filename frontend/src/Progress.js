@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from "./components/Button";
 import styled from "styled-components";
 import { FaClock, FaHistory } from "react-icons/fa";
+import { BACKEND_URI } from "./App";
 
 const ProgressWrapper = styled.div`
   display: grid;
@@ -13,6 +14,10 @@ const ProgressWrapper = styled.div`
     border-left: 4px solid #2cbce8;
     padding: 10px;
     border-radius: 5px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -46,16 +51,13 @@ class Progress extends Component {
   async getHoursTrainedThisMonth() {
     const month = new Date().getMonth();
     const token = localStorage.getItem("auth-token");
-    const response = await fetch(
-      `http://localhost:9000/progress/month/${month}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_URI}/progress/month/${month}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    });
     if (response.status === 200 || response.status === 304) {
       const data = await response.json();
       this.setState({
@@ -67,16 +69,13 @@ class Progress extends Component {
   async getHoursTrainedLastMonth() {
     const month = new Date().getMonth() - 1;
     const token = localStorage.getItem("auth-token");
-    const response = await fetch(
-      `http://localhost:9000/progress/month/${month}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_URI}/progress/month/${month}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    });
     if (response.status === 200 || response.status === 304) {
       const data = await response.json();
       this.setState({
@@ -88,16 +87,13 @@ class Progress extends Component {
   async getHoursTrainedLastYear() {
     const year = new Date().getFullYear() - 1;
     const token = localStorage.getItem("auth-token");
-    const response = await fetch(
-      `http://localhost:9000/progress/year/${year}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_URI}/progress/year/${year}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    });
     if (response.status === 200 || response.status === 304) {
       const data = await response.json();
       this.setState({
@@ -109,16 +105,13 @@ class Progress extends Component {
   async getHoursTrainedThisYear() {
     const year = new Date().getFullYear();
     const token = localStorage.getItem("auth-token");
-    const response = await fetch(
-      `http://localhost:9000/progress/year/${year}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": token,
-        },
-      }
-    );
+    const response = await fetch(`${BACKEND_URI}/progress/year/${year}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    });
     if (response.status === 200 || response.status === 304) {
       const data = await response.json();
       this.setState({
@@ -149,7 +142,7 @@ class Progress extends Component {
     const token = localStorage.getItem("auth-token");
     const body = {};
     body.hoursTrained = this.state.hoursTrainedThisMonth;
-    const response = await fetch("http://localhost:9000/progress/new", {
+    const response = await fetch(`${BACKEND_URI}/progress/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

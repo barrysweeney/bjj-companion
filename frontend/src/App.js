@@ -8,6 +8,8 @@ import Login from "./login";
 import styled from "styled-components";
 import "./index.css";
 
+export const BACKEND_URI = process.env.BACKEND_URI || "http://localhost:9000";
+
 const ContentWrapper = styled.div`
   display: grid;
   grid-gap: 50px;
@@ -31,9 +33,10 @@ class App extends Component {
       <Layout>
         {this.state.authenticated ? (
           <ContentWrapper>
-            <header>
-              <h2>Welcome {this.state.username}</h2>
-            </header>
+            <span style={{ fontWeight: 600, fontSize: `2rem` }}>
+              {this.state.username}
+            </span>
+
             <Progress />
             <Gameplan />
             <Notes />

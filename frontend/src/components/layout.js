@@ -6,7 +6,7 @@ const GridContainer = styled.div`
   height: 100vh;
   width: 100%;
   margin: 0 auto;
-  padding-top: 30px;
+  padding-top: 35px;
   display: grid;
   grid-template-rows: auto 1fr auto;
 
@@ -50,7 +50,7 @@ export default function Layout({ children }) {
           <h1>Jiu-Jitsu Companion</h1>
         </header>
         {children}
-        <Footer>Jiu Jitsu Companion</Footer>
+        <Footer>Jiu Jitsu Companion 2020</Footer>
       </GridContainer>
     </Container>
   );

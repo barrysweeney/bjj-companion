@@ -60,7 +60,7 @@ export class Position extends Component {
         {this.state.saved ? (
           <PositionLayout>
             <PositionWrapper>
-              <span>{this.props.position}</span>
+              <span style={{ fontWeight: 600 }}>{this.props.position}</span>
               <span>{this.props.move}</span>
             </PositionWrapper>
             <Button onClick={this.props.removePosition}>

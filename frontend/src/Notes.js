@@ -2,6 +2,7 @@ import React from "react";
 import { Component } from "react";
 import { Button } from "./components/Button";
 import styled from "styled-components";
+import { BACKEND_URI } from "./App";
 
 const NoteWrapper = styled.div`
   background: #eee;
@@ -29,7 +30,7 @@ export class Notes extends Component {
 
   async getNotesFromDatabase() {
     const token = localStorage.getItem("auth-token");
-    const response = await fetch("http://localhost:9000/notes/", {
+    const response = await fetch(`${BACKEND_URI}/notes/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +52,7 @@ export class Notes extends Component {
     const token = localStorage.getItem("auth-token");
     const body = {};
     body.content = content;
-    const response = await fetch("http://localhost:9000/notes/new", {
+    const response = await fetch(`${BACKEND_URI}/notes/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,8 +90,14 @@ export class Notes extends Component {
           }}
           onSubmit={this.saveNoteToDatabase.bind(this)}
         >
-          <label htmlFor="note">New Note</label>
-          <textarea name="note" id="note" cols="30" rows="5"></textarea>
+          <label htmlFor="note">New Note...</label>
+          <textarea
+            name="note"
+            id="note"
+            cols="30"
+            rows="5"
+            style={{ borderRadius: `5px` }}
+          ></textarea>
           <Button>Save</Button>
         </form>
         {this.state.notes.reverse().map((note) => {

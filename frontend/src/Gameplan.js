@@ -4,6 +4,7 @@ import { BsArrowDown } from "react-icons/bs";
 import { Position } from "./components/Position";
 import { unescape } from "html-escaper";
 import { Button } from "./components/Button";
+import { BACKEND_URI } from "./App";
 
 const GameplanGrid = styled.div`
   display: grid;
@@ -34,7 +35,7 @@ class Gameplan extends Component {
 
   async componentDidMount() {
     const token = localStorage.getItem("auth-token");
-    const response = await fetch("http://localhost:9000/gameplans/", {
+    const response = await fetch(`${BACKEND_URI}/gameplans/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +78,7 @@ class Gameplan extends Component {
     const body = {};
     body.positions = JSON.stringify(this.state.positions);
     body.moves = JSON.stringify(this.state.moves);
-    const response = await fetch("http://localhost:9000/gameplans/new", {
+    const response = await fetch(`${BACKEND_URI}/gameplans/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
